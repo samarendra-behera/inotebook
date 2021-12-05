@@ -3,11 +3,12 @@ const User = require('../models/User');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const fetchUser = require('../middleware/fetchUser');
 const JWT_SECRET = 'Papunisbadb$oy';
 
 
-// Create a User using: POST "/api/auth/createuser". No login required
+// ROUTE 1 Create a User using: POST "/api/auth/createuser". No login required
 router.post('/createuser',
     // User name, email, password validation conditions
     [
@@ -54,8 +55,8 @@ router.post('/createuser',
             res.status(500).send("Internal server Error");
         }
     })
-// Authenticate a User using: POST "/api/auth/lonin".
-router.post('/createuser',
+// ROUTE 2 Authenticate a User using: POST "/api/auth/lonin".
+router.post('/login',
     // User name, email, password validation conditions
     [
         body('email', 'Enter a valid email').isEmail(),
@@ -69,7 +70,7 @@ router.post('/createuser',
         }
         const {email,password} = req.body;
         try {
-            let user = await User.findOne(email);
+            let user = await User.findOne({email});
             if(!user){
                 return res.json({error: "Please try to login with correct credentials"});
             }
@@ -90,5 +91,19 @@ router.post('/createuser',
             res.status(500).send("Internal server Error");
         }
     });
+
+
+// ROUTE 3 Get loggedin User details using: POST "/api/auth/getuser".
+router.post('/getuser',fetchUser,async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId).select("-password");
+        res.send(user);
+        
+    } catch (error) {
+        console.error(error.mesage)
+        res.status(500).send("Internal server Error");
+    }
+});
 
 module.exports = router;
