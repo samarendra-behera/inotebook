@@ -30,7 +30,7 @@ router.post('/addnote', [
         try {
             const note = new Note({ title, description, tag, user: req.user.id });
             const saveNote = await note.save();
-            
+
             // OR You can also use this method to create a new Note of a user 
             // saveNote = await Note.create({
             //     title: req.body.title,
@@ -39,11 +39,35 @@ router.post('/addnote', [
             //     user: req.user.id
             // })
             res.json(saveNote);
-        } 
+        }
         catch (error) {
-            console.error(error.mesage)
+            console.error(error.message)
             res.status(500).send("Internal server Error");
         }
 
     })
+// ROUTE 2:Upadate an existing Note using: PUT "/api/notes/updatenote:id". Login is required
+router.put('/updatenote/:id', fetchUser, async (req, res) => {
+    try {
+        const { title, description, tag } = req.body;
+        // Create a New newNote object 
+        const newNote = {};
+        if (title) { newNote.title = title };
+        if (description) { newNote.description = description };
+        if (tag) { newNote.tag = tag };
+
+        // Find the note to be updated and update it 
+        let note = await Note.findById(req.params.id);
+        if (!note) { return res.status(404).send('Not Found') };
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send('Not Allowed');
+        }
+        note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, {new: true })
+        res.json({note});
+    } 
+    catch (error) {
+        console.error(error.message)
+        res.status(500).send("Internal server Error");
+    }
+});
 module.exports = router;
