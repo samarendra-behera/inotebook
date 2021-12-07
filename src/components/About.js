@@ -3,7 +3,7 @@ import React from 'react'
 export default function About() {
     return (
         <div>
-            This is About Compotent
+            This is About Page
         </div>
     )
 }
