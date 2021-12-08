@@ -12,9 +12,6 @@ export const NoteItem = (props) => {
                         <i className="far fa-trash-alt mx-2"></i>
                     </div>
                     <p className="card-text">{note.description}</p>
-
-
-
                 </div>
             </div>
         </div>
