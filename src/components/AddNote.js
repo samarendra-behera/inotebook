@@ -4,7 +4,7 @@ export const AddNote = () => {
     
     const context = useContext(noteContext);
     const { addNote } = context;
-    const [note, setNote] = useState({title: '',description: "", tag: "default"})
+    const [note, setNote] = useState({title: '',description: "", tag: ""})
     const handelClick = (e)=>{
         e.preventDefault();
         addNote(note.title,note.description,note.tag);
@@ -24,6 +24,10 @@ export const AddNote = () => {
                 <div className="mb-3">
                     <label htmlFor="desc" className="form-label">Description</label>
                     <input type="text" className="form-control" id="desc" name='description' onChange={onChange} />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="tag" className="form-label">Tag</label>
+                    <input type="text" className="form-control" id="tag" name='tag' onChange={onChange} />
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={handelClick}>Add Note</button>
             </form>

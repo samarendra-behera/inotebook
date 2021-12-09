@@ -2,100 +2,89 @@ import NoteContext from "./noteContext";
 import { useState } from "react";
 
 const NoteState = (props) => {
-  const notesInitial = [
-    {
-      "_id": "61ad8dd7bd9473fsb987d11037",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": "Good RelationShip",
-      "description": "The main condition of good relationship is 'understand to each other'",
-      "tag": "personal info",
-      "date": "2021-12-06T04:11:39.909Z",
-      "__v": 0
-    },
-    {
-      "_id": "61ad8d7bsd9s473f0b987d11037",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": "Good RelationShip",
-      "description": "The main condition of good relationship is 'understand to each other'",
-      "tag": "personal info",
-      "date": "2021-12-06T04:11:39.909Z",
-      "__v": 0
-    },
-    {
-      "_id": "61ads8d7bdd9473f0b9871d1037",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": "Good RelationShip",
-      "description": "The main condition of good relationship is 'understand to each other'",
-      "tag": "personal info",
-      "date": "2021-12-06T04:11:39.909Z",
-      "__v": 0
-    },
-    {
-      "_id": "61ad8d7bd9473f0b9871d10s37",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": "Good RelationShip",
-      "description": "The main condition of good relationship is 'understand to each other'",
-      "tag": "personal info",
-      "date": "2021-12-06T04:11:39.909Z",
-      "__v": 0
-    },
-    {
-      "_id": "61ad8d7bd9473f0b98d71103s7",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": "Good RelationShip",
-      "description": "The main condition of good relationship is 'understand to each other'",
-      "tag": "personal info",
-      "date": "2021-12-06T04:11:39.909Z",
-      "__v": 0
-    },
-    {
-      "_id": "61ad8d7bd9473fd0b98711037s",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": "Good RelationShip",
-      "description": "The main condition of good relationship is 'understand to each other'",
-      "tag": "personal info",
-      "date": "2021-12-06T04:11:39.909Z",
-      "__v": 0
-    },
-    {
-      "_id": "61ad9s38d9a60461d0ea302dd8",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": "Good RelationShip is Best relation-Ship",
-      "description": "The main condition of good relationship is 'understand to each other haaaa'",
-      "tag": "personal info",
-      "date": "2021-12-06T04:37:33.140Z",
-      "__v": 0
-    }
-  ]
+  const host = 'http://localhost:5000';
+  const notesInitial = []
   const [notes, setNotes] = useState(notesInitial);
 
+  // Get all  Note
+  const getNotes = async () => {
+    // API Call
+    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+      }
+    });
+    const newNotes = await response.json();
+    // Logic to Add Note in client
+    setNotes(newNotes);
+
+  } 
+
   // Add a Note
-  const addNote=(title,description,tag)=>{
-    const note = {
-      "_id": "61ad9s38d9a60461d0sfdsea302dd8",
-      "user": "61ac8bb36c76deb8dcc45b20",
-      "title": title,
-      "description": description,
-      "tag": tag,
-      "date": "2021-12-06T04:37:33.140Z",
-      "__v": 0
-    };
-    setNotes(notes.concat(note));
+  const addNote = async (title, description, tag) => {
+    // API Call
+    const response = await fetch(`${host}/api/notes/addnote`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+      },
+      body: JSON.stringify({ title, description, tag })
+    });
+    const json = await response.json();
+
+    // Logic to Add Note in client    
+    setNotes(notes.concat(json));
 
   }
 
-  // Delete a Note
-  const deleteNote=()=>{
+   // Delete a Note
+   const deleteNote = async (id) => {
+    // API Call
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+      }
+    });
+    const json = await response.json();
+    console.log(json);
+
+    // Logic to edit Note in client
+    const newNotes = notes.filter((note) => { return note._id !== id });
+    setNotes(newNotes);
 
   }
+
 
   // Edit a Note
-  const editNote=()=>{
+  const editNote = async (id, title, description, tag) => {
+    // API Call
+    const response = await fetch(`${host}/api/api/notes/updatenote/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+      },
+      body: JSON.stringify(title, description, tag)
+    });
 
+    // Logic to edit Note in client
+    for (let index = 0; index < notes.length; index++) {
+      const element = notes[index];
+      if (id === element._id) {
+        element.title = title;
+        element.description = description;
+        element.tag = tag;
+      }
+    }
   }
 
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote}}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
       {props.children}
     </NoteContext.Provider>
   )
