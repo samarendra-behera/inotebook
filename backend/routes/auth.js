@@ -18,10 +18,11 @@ router.post('/createuser',
 
     ],
     async (req, res) => {
+        let success = false;
         // If there are errors, return Bad request and the errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ success, errors: errors.array() });
         }
         // user Creating and Checking inside the try
         try {
@@ -29,7 +30,7 @@ router.post('/createuser',
             let user = await User.findOne({ email: req.body.email });
             console.log(user);
             if (user) {
-                return res.status(400).json({ error: "Sorry a user with this email already  exists" })
+                return res.status(400).json({ success,error: "Sorry a user with this email already  exists" })
             }
             // Incrypt the password using bcrypt js packect
             const salt = await bcrypt.genSalt(10);
@@ -47,7 +48,8 @@ router.post('/createuser',
             }
             const authtoken = jwt.sign(data, JWT_SECRET);
             // console.log(authtoken);
-            res.json({ authtoken });
+            success = true;
+            res.json({ success, authtoken });
         }
         // When error occure to checking and creating user 
         catch (error) {
