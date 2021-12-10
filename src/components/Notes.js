@@ -19,6 +19,7 @@ export const Notes = (props) => {
         e.preventDefault();
         editNote(note.eid,note.etitle,note.edescription,note.etag);
         closeRef.current.click();
+        setNote({eid: '', etitle: '',edescription: "", etag: ""})
     }
     const onChange =(e)=>{
         setNote({...note,[e.target.name]: e.target.value})
@@ -62,13 +63,16 @@ export const Notes = (props) => {
                         </div>
                         <div className="modal-footer">
                             <button ref = {closeRef} type="button" className="btn btn-secondary d-none" data-bs-dismiss="modal">Close</button>
-                            <button onClick={handelClick} type="button" className="btn btn-primary">Update Note</button>
+                            <button disabled={note.etitle<5 || note.edescription<5} onClick={handelClick} type="button" className="btn btn-primary">Update Note</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div className='row my-3'>
                 <h1>Your Notes</h1>
+                <div className="container mx-4">
+                    {notes.length === 0 && 'No notes to display'}
+                </div>
                 {notes.map((note) => {
                     return (
                         <NoteItem key={note._id} note={note} updateNote={updateNote}/>
