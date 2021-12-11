@@ -23,8 +23,8 @@ export const Login = () => {
         if(json.success){
             // Save the auth token and Redirect
             localStorage.setItem('token',json.authtoken);
-            navigate('/');
             showAlert('Logged in Successfully', 'success');
+            navigate('/');
 
         }
         else{
@@ -36,7 +36,8 @@ export const Login = () => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
     }
     return (
-        <div className='my-4 container'>
+        <div className='my-3 container'>
+            <h2 className="my-3">Login to continue to iNotebook</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>

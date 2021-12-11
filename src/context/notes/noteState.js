@@ -13,7 +13,7 @@ const NoteState = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+        "auth-token": localStorage.getItem('token')
       }
     });
     const newNotes = await response.json();
@@ -29,7 +29,7 @@ const NoteState = (props) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+        "auth-token": localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag })
     });
@@ -47,10 +47,11 @@ const NoteState = (props) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+        "auth-token": localStorage.getItem('token')
       }
     });
     const json = await response.json();
+    console.log(json);
 
     // Logic to Delete Note in client
     const newNotes = notes.filter((note) => { return note._id !== id });
@@ -66,11 +67,12 @@ const NoteState = (props) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYzhiYjM2Yzc2ZGViOGRjYzQ1YjIwIn0sImlhdCI6MTYzODcxOTcyOH0.FlCI2VblBvMQwPQ67PC0PqGowussTkoTOWV8_4snyp8"
+        "auth-token": localStorage.getItem('token')
       },
       body: JSON.stringify({title, description, tag})
     });
     const json = await response.json();
+    console.log(json);
 
     // Logic to edit Note in client
     let newNotes = JSON.parse(JSON.stringify(notes)); 

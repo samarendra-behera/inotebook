@@ -10,7 +10,7 @@ export const AddNote = () => {
     const handelClick = (e)=>{
         e.preventDefault();
         addNote(note.title,note.description,note.tag);
-        setNote({title: '',description: "", tag: ""})
+        setNote({title: '',description: "", tag: ""}) 
         showAlert('Added Successfully','success');
 
     }
