@@ -2,9 +2,11 @@ import { useContext, useEffect, useRef, useState} from 'react';
 import noteContext from '../context/notes/noteContext'
 import { AddNote } from './AddNote';
 import { NoteItem } from './NoteItem';
+import alertContext from '../context/alert/alertContext';
 
 export const Notes = (props) => {
-
+    const alContext = useContext(alertContext);
+    const { showAlert } = alContext;
     const context = useContext(noteContext);
     const { notes,getNotes,editNote} = context;
     const [note, setNote] = useState({eid: '', etitle: '',edescription: "", etag: ""})
@@ -19,7 +21,8 @@ export const Notes = (props) => {
         e.preventDefault();
         editNote(note.eid,note.etitle,note.edescription,note.etag);
         closeRef.current.click();
-        setNote({eid: '', etitle: '',edescription: "", etag: ""})
+        setNote({eid: '', etitle: '',edescription: "", etag: ""});
+        showAlert('Updated Successfully','success')
     }
     const onChange =(e)=>{
         setNote({...note,[e.target.name]: e.target.value})
@@ -49,11 +52,11 @@ export const Notes = (props) => {
                             <form className='my-3'>
                                 <div className="mb-3">
                                     <label htmlFor="etitle" className="form-label">Title</label>
-                                    <input value = {note.etitle} type="text" className="form-control" id="etitle" name='etitle' onChange={onChange} />
+                                    <input value = {note.etitle} type="text" className="form-control" id="etitle" name='etitle' onChange={onChange}/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="edescription" className="form-label">Description</label>
-                                    <input value = {note.edescription} type="text" className="form-control" id="edescription" name='edescription' onChange={onChange} />
+                                    <input value = {note.edescription} type="text" className="form-control" id="edescription" name='edescription' onChange={onChange}/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="etag" className="form-label">Tag</label>
@@ -63,7 +66,7 @@ export const Notes = (props) => {
                         </div>
                         <div className="modal-footer">
                             <button ref = {closeRef} type="button" className="btn btn-secondary d-none" data-bs-dismiss="modal">Close</button>
-                            <button disabled={note.etitle<5 || note.edescription<5} onClick={handelClick} type="button" className="btn btn-primary">Update Note</button>
+                            <button disabled={note.etitle.length<5 || note.edescription.length<5} onClick={handelClick} type="button" className="btn btn-primary">Update Note</button>
                         </div>
                     </div>
                 </div>
@@ -82,3 +85,4 @@ export const Notes = (props) => {
         </>
     )
 }
+export default Notes;

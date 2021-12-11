@@ -47,8 +47,15 @@ router.post('/addnote', [
 
     })
 // ROUTE 3:Upadate an existing Note using: PUT "/api/notes/updatenote:id". Login is required
-router.put('/updatenote/:id', fetchUser, async (req, res) => {
+router.put('/updatenote/:id', [
+    body('title', 'Enter a valid title').isLength({ min: 3 }),
+    body('description', 'Description must be atleast 5 characters').isLength({ min: 5 })],fetchUser, async (req, res) => {
     const { title, description, tag } = req.body;
+    // If there are errors, return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         // Create a New newNote object 
         const newNote = {};

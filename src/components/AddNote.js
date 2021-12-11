@@ -1,7 +1,9 @@
 import {useContext, useState} from 'react'
 import noteContext from '../context/notes/noteContext'
+import alertContext from '../context/alert/alertContext';
 export const AddNote = () => {
-    
+    const alContext = useContext(alertContext);
+    const {showAlert} = alContext;
     const context = useContext(noteContext);
     const { addNote } = context;
     const [note, setNote] = useState({title: '',description: "", tag: ""})
@@ -9,6 +11,7 @@ export const AddNote = () => {
         e.preventDefault();
         addNote(note.title,note.description,note.tag);
         setNote({title: '',description: "", tag: ""})
+        showAlert('Added Successfully','success');
 
     }
     const onChange =(e)=>{
@@ -30,8 +33,9 @@ export const AddNote = () => {
                     <label htmlFor="tag" className="form-label">Tag</label>
                     <input value={note.tag}type="text" className="form-control" id="tag" name='tag' onChange={onChange} />
                 </div>
-                <button disabled={note.title<5 || note.description<5} type="submit" className="btn btn-primary" onClick={handelClick}>Add Note</button>
+                <button disabled={note.title.length<5 || note.description.length<5} type="submit" className="btn btn-primary" onClick={handelClick}>Add Note</button>
             </form>
         </div>
     )
 }
+export default AddNote;
